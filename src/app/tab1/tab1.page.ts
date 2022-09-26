@@ -1,38 +1,40 @@
 import { Component } from '@angular/core';
-import { AppVersion } from '@ionic-native/app-version/ngx';
+// import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { Share } from '@capacitor/share';
+import { Network } from '@capacitor/network';
+import { ActionSheet, ActionSheetButtonStyle } from '@capacitor/action-sheet';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  styleUrls: ['tab1.page.scss'],
 })
 export class Tab1Page {
   myImage = null;
   position: Position = null;
 
-  constructor(private appVersion: AppVersion) {
+  constructor() {
+    this.checkNetwork();
     // this.appversion.getVersionCode().then(value => {
     //   alert(value);
     // }).catch(err => {
     //   alert(err);
     // });
-    this.appVersion.getPackageName().then(value => {
-      alert(value);
-  }).catch(err => {
-      alert(err);
-    });
+    //   this.appVersion.getPackageName().then(value => {
+    //     alert(value);
+    // }).catch(err => {
+    //     alert(err);
+    //   });
   }
-
 
   async takePicture() {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
       resultType: CameraResultType.Uri,
-      source: CameraSource.Camera
+      source: CameraSource.Camera,
     });
 
     this.myImage = image.webPath;
@@ -50,7 +52,21 @@ export class Tab1Page {
       text: `Here's my current location: 
         ${this.position.coords.latitude}, 
         ${this.position.coords.longitude}`,
-      url: 'http://ionicacademy.com/'
+      url: 'http://ionicacademy.com/',
     });
+  }
+
+  checkNetwork() {
+    Network.addListener('networkStatusChange', (status) => {
+      console.log('Network status changed', status);
+    });
+
+    const logCurrentNetworkStatus = async () => {
+      const status = await Network.getStatus();
+
+      console.log('Network status:', status);
+    };
+
+    // console.log('logCurrentNetworkStatus: '+logCurrentNetworkStatus);
   }
 }

@@ -1,0 +1,11 @@
+.arrow{
+    display: inline-block;
+    border: solid #000;
+    border-width: 0 3px 3px 0;
+    // border-width: 3px;
+    padding: 3px;
+    transform: rotate(-45deg);  //right
+    // transform: rotate(45deg);   //down
+    // transform: rotate(-135deg); //up
+    // transform: rotate(135deg);  //left
+}
